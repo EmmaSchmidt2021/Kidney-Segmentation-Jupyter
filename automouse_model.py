@@ -97,10 +97,10 @@ from tensorflow.python.keras.layers import concatenate
 from tensorflow.keras.optimizers import Adam
 
 def automouseTKV_model_2():
-    img_rows = 256
-    img_cols = 256
+    img_rows = 512
+    img_cols = 512
 
-    inputs = Input((1, img_rows, img_cols))
+    inputs = Input((img_rows, img_cols, 1))
     
     conv1 = Conv2D(32, (7, 7), activation='relu', padding='same')(inputs)
     conv1 = Dropout(0.5)(conv1)
