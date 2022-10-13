@@ -67,6 +67,7 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
 
         return X, y
 
+
     def on_epoch_end(self):
         'Updates indexes after each epoch'
         self.indexes = np.arange(len(self.list_IDs))
@@ -90,10 +91,15 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
             lbl_f_name = im_f_name.replace('M.npy', 'K.npy')
             
             im = np.load(im_f_name)
+            #print(im.max, im.min)
             lbl = np.load(lbl_f_name)
+           
             
-            X[i, ...,0] = im[..., 0]
-            y[i, ...] = lbl[..., 0]
+            
+            #X[i, ...,0] = im[..., 0]
+            #y[i, ...] = lbl[..., 0]
+            X[i, ...,0] = im[...]
+            y[i, ...] = lbl[...]
             # Store class
             #y[i,] = np.load(self.labels[ID])
             #y[i] = self.labels[ID]
