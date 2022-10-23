@@ -87,7 +87,10 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
             # Store sample
             #X[i,] = np.load('data/' + ID + '.npy')
             
-            im_f_name = 'data\\' + ID
+            #if all of the files are in the same location use general directory
+            #im_f_name = 'data\\' + ID]
+            #maintain filepath in ID:
+            im_f_name = ID
             lbl_f_name = im_f_name.replace('M.npy', 'K.npy')
             
             im = np.load(im_f_name)
