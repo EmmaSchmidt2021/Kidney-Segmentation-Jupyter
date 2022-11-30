@@ -28,9 +28,9 @@ import fnmatch
 import nibabel as nib
 import shutil
 
-class DataGeneratorK(tensorflow.keras.utils.Sequence):
+class DataGeneratorCyst(tensorflow.keras.utils.Sequence):
     'Generates data for Keras'
-    def __init__(self, list_IDs, labels, batch_size=12, dim=(512,512), n_channels=2,
+    def __init__(self, list_IDs, labels, batch_size=12, dim=(512,512), n_channels=1,
                  n_classes=2, shuffle=True):
         'Initialization'
         self.dim = dim
@@ -77,11 +77,7 @@ class DataGeneratorK(tensorflow.keras.utils.Sequence):
     def __data_generation(self, list_IDs_temp):
         'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
         # Initialization
-        #X1 = np.empty((self.batch_size, *self.dim, self.n_channels))
-        #print(X.shape)
-        #X2 = np.empty((self.batch_size, *self.dim, self.n_channels))
         X = np.empty((self.batch_size, *self.dim, self.n_channels))
-        print(X.shape)
         # X shape should be (12,(512,512,1),1)
         y = np.empty((self.batch_size, *self.dim))
         # y shape should be (12,(512,512,1),1)
@@ -95,27 +91,22 @@ class DataGeneratorK(tensorflow.keras.utils.Sequence):
             #im_f_name = 'data\\' + ID]
             #maintain filepath in ID:
             im_f_name = ID
-            msk_f_name = im_f_name.replace('M.npy', 'K.npy')
             lbl_f_name = im_f_name.replace('M.npy', 'C.npy')
+            print(im_f_name, lbl_f_name)
             
             im = np.load(im_f_name)
-            msk = np.load(msk_f_name)
             #print(im.max, im.min)
             lbl = np.load(lbl_f_name)
            
-            pos = i*2
             
-            X[pos, ...,0] = im[...]
-            X[pos+1,...,0] = msk[...]
+            
+            #X[i, ...,0] = im[..., 0]
             #y[i, ...] = lbl[..., 0]
-            #attempt 2 X values as inputs?
-            #https://stackoverflow.com/questions/59492866/keras-imagedatagenerator-for-multiple-inputs-and-image-based-target-output
-            #X1[i, ...,0] = im[...]
-            #X2[i, ...,0] = msk[...]
+            X[i, ...,0] = im[...]
             y[i, ...] = lbl[...]
             # Store class
             #y[i,] = np.load(self.labels[ID])
             #y[i] = self.labels[ID]
-            print(y.shape)
+            #print(y.shape)
 
         return X, to_categorical(y, num_classes=self.n_classes)
