@@ -77,15 +77,9 @@ class DataGeneratorK(tensorflow.keras.utils.Sequence):
     def __data_generation(self, list_IDs_temp):
         'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
         # Initialization
-        #X1 = np.empty((self.batch_size, *self.dim, self.n_channels))
-        #print(X.shape)
-        #X2 = np.empty((self.batch_size, *self.dim, self.n_channels))
         X = np.empty((self.batch_size, *self.dim, self.n_channels))
-        print(X.shape)
-        # X shape should be (12,(512,512,1),1)
         y = np.empty((self.batch_size, *self.dim))
-        # y shape should be (12,(512,512,1),1)
-
+        
         # Generate data
         for i, ID in enumerate(list_IDs_temp):
             # Store sample
@@ -100,22 +94,16 @@ class DataGeneratorK(tensorflow.keras.utils.Sequence):
             
             im = np.load(im_f_name)
             msk = np.load(msk_f_name)
-            #print(im.max, im.min)
+            
             lbl = np.load(lbl_f_name)
            
-            pos = i*2
+
             
-            X[pos, ...,0] = im[...]
-            X[pos+1,...,0] = msk[...]
-            #y[i, ...] = lbl[..., 0]
-            #attempt 2 X values as inputs?
-            #https://stackoverflow.com/questions/59492866/keras-imagedatagenerator-for-multiple-inputs-and-image-based-target-output
-            #X1[i, ...,0] = im[...]
-            #X2[i, ...,0] = msk[...]
+            X[i, ...,0] = im[...]
+            X[i,...,1] = msk[...]
+
             y[i, ...] = lbl[...]
-            # Store class
-            #y[i,] = np.load(self.labels[ID])
-            #y[i] = self.labels[ID]
-            print(y.shape)
+
+            #print(y.shape)
 
         return X, to_categorical(y, num_classes=self.n_classes)
