@@ -28,7 +28,7 @@ import fnmatch
 import nibabel as nib
 import shutil
 
-class DataGeneratorK(tensorflow.keras.utils.Sequence):
+class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
     'Generates data for Keras'
     def __init__(self, list_IDs, labels, batch_size=12, dim=(512,512), n_channels=2,
                  n_classes=2, shuffle=True):
@@ -89,13 +89,16 @@ class DataGeneratorK(tensorflow.keras.utils.Sequence):
             #im_f_name = 'data\\' + ID]
             #maintain filepath in ID:
             im_f_name = ID
-            msk_f_name = im_f_name.replace('M.npy', 'K.npy')
+            
             lbl_f_name = im_f_name.replace('M.npy', 'C.npy')
             
             im = np.load(im_f_name)
+            lbl = np.load(lbl_f_name)
+            
+            msk_f_name = im_f_name.replace('M.npy', 'ALL_INSTITUTION_80-10_35ep_K.npy')            
             msk = np.load(msk_f_name)
             
-            lbl = np.load(lbl_f_name)
+           
            
 
             
