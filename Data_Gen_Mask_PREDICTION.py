@@ -28,7 +28,7 @@ import fnmatch
 import nibabel as nib
 import shutil
 
-class DataGeneratorK(tensorflow.keras.utils.Sequence):
+class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
     'Generates data for Keras'
     def __init__(self, list_IDs, labels, batch_size=12, dim=(512,512), n_channels=2,
                  n_classes=2, shuffle=True):
@@ -109,7 +109,8 @@ class DataGeneratorK(tensorflow.keras.utils.Sequence):
                 model.load_weights('ALL_INSTITUTION_80-10_35ep.h5')
                 #print('load model complete')
                 img_prediction = model.predict(X[:,:,:,0])
-                img_prediction = img_prediction.astype('float')
+                img_prediction = img_prediction.astype('uint8')
+                
                 #print(img_prediction.shape)
                 X[...,1] = img_prediction[:,:,:,1]
                 #print('successful kidney mask prediction')
