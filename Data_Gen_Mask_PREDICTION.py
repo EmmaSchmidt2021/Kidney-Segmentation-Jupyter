@@ -28,7 +28,7 @@ import fnmatch
 import nibabel as nib
 import shutil
 
-class DataGeneratorK_Emory(tensorflow.keras.utils.Sequence):
+class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
     'Generates data for Keras'
     def __init__(self, list_IDs, labels, batch_size=12, dim=(512,512), n_channels=2,
                  n_classes=2, shuffle=True):
@@ -106,7 +106,7 @@ class DataGeneratorK_Emory(tensorflow.keras.utils.Sequence):
             #print(y.shape)
             if i == 31:
                 model = custom_unet(input_shape=(512,512,1), num_classes=2)
-                model.load_weights('Emory-Kidneys-35.h5')
+                model.load_weights('ALL_INSTITUTION_80-10_35ep.h5')
                 #print('load model complete')
                 img_prediction = model.predict(X[:,:,:,0])
                 img_prediction = img_prediction.astype('uint8')
