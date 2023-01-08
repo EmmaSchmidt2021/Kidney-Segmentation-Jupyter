@@ -27,6 +27,8 @@ from PIL import ImageOps
 import fnmatch
 import nibabel as nib
 import shutil
+import albumentations as A
+import random
 
 class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
     'Generates data for Keras'
@@ -107,6 +109,28 @@ class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
 
             y[i, ...] = lbl[...]
 
-            #print(y.shape)
+            transform = A.Compose([
+                A.RandomRotate90(),
+                #A.Transpose(),
+                #A.Blur(blur_limit=6),
+                A.OpticalDistortion(),
+                #A.GridDistortion(),
+            ])
+            random.seed(43)
+            for s in range(16):
+                #print(im_f_name)
+                image = np.zeros((512,512,3))
+                image[:,:,0] = X[s,...,0]
+                image[:,:,1] = X[s,...,1]
+                image[:,:,2] = y[s,...]
+
+                aug_stack = transform(image=image)['image']
+                X[s,...,0] = aug_stack[...,0]
+                X[s,...,1] = aug_stack[...,1]
+                y[s,...] = aug_stack[...,2]
+            
+
+        
+        
 
         return X, to_categorical(y, num_classes=self.n_classes)
