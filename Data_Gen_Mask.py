@@ -29,8 +29,10 @@ import nibabel as nib
 import shutil
 import albumentations as A
 import random
+from skimage import data, segmentation
+from skimage.segmentation import mark_boundaries, find_boundaries
 
-class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
+class DataGeneratorK_Aug(tensorflow.keras.utils.Sequence):
     'Generates data for Keras'
     def __init__(self, list_IDs, labels, batch_size=12, dim=(512,512), n_channels=2,
                  n_classes=2, shuffle=True):
@@ -98,7 +100,8 @@ class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
             lbl = np.load(lbl_f_name)
             
             msk_f_name = im_f_name.replace('M.npy', 'ALL_INSTITUTION_80-10_35ep_K.npy')            
-            msk = np.load(msk_f_name)
+            mask = np.load(msk_f_name)
+            msk = find_boundaries(mask, mode='thick').astype(np.uint8)
             
            
            
@@ -111,14 +114,17 @@ class DataGeneratorK_ALL(tensorflow.keras.utils.Sequence):
 
             transform = A.Compose([
                 A.RandomRotate90(),
-                #A.Transpose(),
+                A.Transpose(),
+                #A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, brightness_by_max=True, always_apply=False, p=0.5),
+                #A.GaussNoise(),
                 #A.Blur(blur_limit=6),
-                A.OpticalDistortion(),
-                #A.GridDistortion(),
+                #A.OpticalDistortion(distort_limit=-0.05),
+                #A.GridDistortion(),#grid distortion is the bad child messing up images
             ])
             random.seed(43)
+            #print("stahp blurring shit -bright?")
             for s in range(16):
-                #print(im_f_name)
+                
                 image = np.zeros((512,512,3))
                 image[:,:,0] = X[s,...,0]
                 image[:,:,1] = X[s,...,1]
