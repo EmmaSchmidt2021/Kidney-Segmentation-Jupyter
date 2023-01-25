@@ -99,7 +99,7 @@ class DataGeneratorK_Aug(tensorflow.keras.utils.Sequence):
             im = np.load(im_f_name)
             lbl = np.load(lbl_f_name)
             
-            msk_f_name = im_f_name.replace('M.npy', 'ALL_INSTITUTION_80-10_35ep_K.npy')            
+            msk_f_name = im_f_name.replace('M.npy', 'Emory-kidneys-35_K.npy')            
             mask = np.load(msk_f_name)
             msk = find_boundaries(mask, mode='inner').astype(np.uint8)
             
