@@ -10,3 +10,16 @@
  PI: Dr. Hyunki (Harrison) Kim
  
  Graduate MS Student: Emma K Schmidt
+
+
+In order for this code to run on a local machine, use the package versioning below:
+
+- python=3.8.5
+- keras==2.8.0
+- tb-nightly==2.9.0a20220301
+- tensorflow==2.8.0
+- tensorflow-gpu==2.3.0
+- cudatoolkit=11.0.221=h74a9793_0
+- cudnn=8.2.1=cuda11.3_0
+
+In order to recreate the environment, use the environment.yml in the main directory of this repo
